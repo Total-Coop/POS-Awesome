@@ -1137,7 +1137,7 @@ export default {
     },
 
     show_payment() {
-      evntBus.$emit('show_loader', true);
+    
       if (!this.customer) {
         evntBus.$emit('show_mesage', {
           text: __(`There is no Customer !`),
@@ -1152,10 +1152,11 @@ export default {
         });
         return;
       }
+      evntBus.$emit('show_loader', true);
       if (!this.validate()) {
+      evntBus.$emit('show_loader', false);
         return;
       }
-    
       evntBus.$emit('show_payment', 'true');
       const invoice_doc = this.proces_invoice();
       evntBus.$emit('send_invoice_doc_payment', invoice_doc);
