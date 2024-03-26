@@ -799,6 +799,8 @@ export default {
       this.back_to_invoice();
     },
     submit_invoice() {
+      evntBus.$emit('show_loader', true);
+
       let data = {};
       data['total_change'] = -this.diff_payment;
       data['paid_change'] = this.paid_change;
@@ -825,9 +827,11 @@ export default {
             });
             frappe.utils.play_sound('submit');
             this.addresses = [];
+            evntBus.$emit('show_loader', false);
           }
         },
       });
+      evntBus.$emit('show_loader', false);
     },
     set_full_amount(idx) {
       this.invoice_doc.payments.forEach((payment) => {
@@ -936,6 +940,7 @@ export default {
       }
     },
     get_addresses() {
+      evntBus.$emit('show_loader', true);
       const vm = this;
       if (!vm.invoice_doc) {
         return;
@@ -950,8 +955,10 @@ export default {
           } else {
             vm.addresses = [];
           }
+          evntBus.$emit('show_loader', false);
         },
       });
+      evntBus.$emit('show_loader', false);
     },
     addressFilter(item, queryText, itemText) {
       const textOne = item.address_title
@@ -978,6 +985,7 @@ export default {
       evntBus.$emit('open_new_address', this.invoice_doc.customer);
     },
     get_sales_person_names() {
+      evntBus.$emit('show_loader', true);
       const vm = this;
       if (
         vm.pos_profile.posa_local_storage &&
@@ -999,9 +1007,11 @@ export default {
                 JSON.stringify(r.message)
               );
             }
+            evntBus.$emit('show_loader', false);
           }
         },
       });
+      evntBus.$emit('show_loader', false);
     },
     salesPersonFilter(item, queryText, itemText) {
       const textOne = item.sales_person_name
